@@ -1,22 +1,24 @@
-#!/usr/bin/env python3
+#!usr/bin/env python3
 import rospy
 from std_msgs.msg import String
 
 
 def status_talker():
-    pub = rospy.Publisher('status', String, queue_size=10)
+    pub = rospy.Publisher('/status_talker/status', String, queue_size=10)
     rospy.init_node('status_talker', anonymous=True)
     rate = rospy.Rate(2)
     while not rospy.is_shutdown():
-        for msg in range(5):
-            if msg == 2:
-                publish_msg = "status:warning"
-            elif msg == 4:
-                publish_msg = "status:error"
+        for current_status in range(5):
+            if current_status == 2:
+                status = "status:warning"
+                rospy.logwarn(status)
+            elif current_status == 4:
+                status = "status:error"
+                rospy.logerr(status)
             else:
-                publish_msg = "status:ok"
-            rospy.loginfo(publish_msg)
-            pub.publish(publish_msg)
+                status = "status:ok"
+                rospy.loginfo(status)
+            pub.publish(status)
             rate.sleep()
 
 
